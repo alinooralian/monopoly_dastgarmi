@@ -1,5 +1,19 @@
 import re
 import uuid
+import json
+
+
+with open("users.json", "r") as f:
+    try:
+        users = json.load(f)
+    except json.JSONDecodeError:
+        users = {}
+
+with open("players.json", "r") as f:
+    try:
+        players = json.load(f)
+    except json.JSONDecodeError:
+        players = {}
 
 def signup():
     username = input("Enter your username: ")
@@ -29,7 +43,10 @@ def signup():
         "property" : 0,
         "prsion" : False
     }
-    
+    with open("users.json", "w", encoding="utf-8") as f:
+        json.dump(users, f, ensure_ascii=False, indent=4)
+    with open("players.json", "w", encoding="utf-8") as f:
+        json.dump(players, f, ensure_ascii=False, indent=4)
     return True
 def login(Type):
     username = input("Enter your username: ")
@@ -48,6 +65,8 @@ def login(Type):
                         "property" : 0,
                         "prsion" : False
                     }
+                    with open("players.json", "w", encoding="utf-8") as f:
+                        json.dump(players, f, ensure_ascii=False, indent=4)
                     return True
                 break
     else:
@@ -63,19 +82,6 @@ def login(Type):
     
     return False
 
-users = {
-    "user_id" : ["username", "password", "email"],
-}
-players = {
-    "user_id" : {
-            "username" : "username",
-            "password" : "password",
-            "money" : "money",
-            "position" : "position",
-            "property" : "property",
-            "prison" : "prison"
-        },
-}
 
 print("1.New Game")
 print("2.Load Game")
@@ -84,8 +90,10 @@ print("4.Exit")
 key = input()
 
 if key == '1':
-    cnt = 0
-    while cnt < 4:
+    with open("players.json", "w", encoding="utf-8") as f:
+        json.dump({}, f)
+        
+    while len(players) < 4:
         print("1.Singup")
         print("2.Login")
         print("3.Exit")
@@ -103,8 +111,7 @@ if key == '1':
         
         if key == '3':
             exit()
-        
-        cnt += 1
+
 elif key == '2':
     cnt = 0
     while cnt < 4:
