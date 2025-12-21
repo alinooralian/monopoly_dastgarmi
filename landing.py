@@ -24,24 +24,38 @@ def signup():
     users[userid] = [username, password, email]
     players[userid] = {
         "username" : username,
+        "password" : password,
+        "money" : 120,
+        "property" : 0,
+        "prsion" : False
     }
     
     return True
-def login():
+def login(Type):
     username = input("Enter your username: ")
     password = input("Enter your password: ")
     
     check = False
-    for i in users:
-        if users[i][0] == username:
-            check = True
-            if users[i][1] == password:
-                players[i] = {
-                    "username" : username,
-                }
-                return True
-            break
-    
+    if Type == 1:
+        for i in users:
+            if users[i][0] == username:
+                check = True
+                if users[i][1] == password:
+                    players[i] = {
+                        "username" : username,
+                        "password" : password,
+                        "money" : 120,
+                        "property" : 0,
+                        "prsion" : False
+                    }
+                    return True
+                break
+    else:
+        for i in players:
+            if players[i]["username"] == username:
+                check = True
+                if players[i]["password"] == password:
+                    return True
     if check:
         print("The password is invalid.")
     else:
@@ -53,7 +67,14 @@ users = {
     "user_id" : ["username", "password", "email"],
 }
 players = {
-    "user_id" : ["username", "password", "email"],
+    "user_id" : {
+            "username" : "username",
+            "password" : "password",
+            "money" : "money",
+            "position" : "position",
+            "property" : "property",
+            "prison" : "prison"
+        },
 }
 
 print("1.New Game")
@@ -77,10 +98,20 @@ if key == '1':
         
         if key == '2':
             while True:
-                if login():
+                if login(1):
                     break
         
         if key == '3':
             exit()
         
         cnt += 1
+elif key == '2':
+    cnt = 0
+    while cnt < 4:
+        while True:
+            if login(2):
+                break
+        
+        cnt += 1
+elif key == '4':
+    exit()
