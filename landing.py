@@ -1,7 +1,7 @@
 import re
 import uuid
 import json
-
+import time
 
 with open("users.json", "r") as f:
     try:
@@ -92,8 +92,16 @@ key = input()
 if key == '1':
     with open("players.json", "w", encoding="utf-8") as f:
         json.dump({}, f)
-        
-    while len(players) < 4:
+    
+    with open("players.json", "r") as f:
+        try:
+            players = json.load(f)
+        except json.JSONDecodeError:
+            players = {}
+    
+    while True:
+        if len(players) >= 4:
+            break
         print("1.Singup")
         print("2.Login")
         print("3.Exit")
