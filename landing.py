@@ -2,6 +2,8 @@ import re
 import uuid
 import json
 import time
+import os
+from pathlib import Path
 
 with open("users.json", "r") as f:
     try:
@@ -9,11 +11,7 @@ with open("users.json", "r") as f:
     except json.JSONDecodeError:
         users = {}
 
-with open("players.json", "r") as f:
-    try:
-        players = json.load(f)
-    except json.JSONDecodeError:
-        players = {}
+players = dict()
 
 def signup():
     username = input("Enter your username: ")
@@ -45,7 +43,7 @@ def signup():
     }
     with open("users.json", "w", encoding="utf-8") as f:
         json.dump(users, f, ensure_ascii=False, indent=4)
-    with open("players.json", "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(players, f, ensure_ascii=False, indent=4)
     return True
 def login(Type):
@@ -65,7 +63,7 @@ def login(Type):
                         "property" : 0,
                         "prsion" : False
                     }
-                    with open("players.json", "w", encoding="utf-8") as f:
+                    with open(path, "w", encoding="utf-8") as f:
                         json.dump(players, f, ensure_ascii=False, indent=4)
                     return True
                 break
@@ -90,10 +88,13 @@ print("4.Exit")
 key = input()
 
 if key == '1':
-    with open("players.json", "w", encoding="utf-8") as f:
-        json.dump({}, f)
+    game_name = input("Enter your game name: ") + ".json"
+    path = Path(__file__).parent / "old_games" / game_name
     
-    with open("players.json", "r") as f:
+    with open(path, "x", encoding="utf-8") as f:
+        pass
+    
+    with open(path, "r", encoding="utf-8") as f:
         try:
             players = json.load(f)
         except json.JSONDecodeError:
@@ -121,6 +122,25 @@ if key == '1':
             exit()
 
 elif key == '2':
+    game_name = input("Enter your game name: ") + ".json"
+    path = Path(__file__).parent / "old_games" / game_name
+
+    with open(path, "r", encoding="utf-8") as f:
+        try:
+            players = json.load(f)
+        except json.JSONDecodeError:
+            players = {}
+
+    if len(players) < 4:
+        print(f"You have fewer than 4 players. {4 - len(players)} more people must register first.")
+
+        while len(players) < 4:
+            while True:
+                if signup():
+                    break
+        
+        print("Now you can log in to your account to continue playing.")
+
     cnt = 0
     while cnt < 4:
         while True:
