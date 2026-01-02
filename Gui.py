@@ -3,10 +3,10 @@ import subprocess
 import sys
 
 def run_signup():
-    subprocess.Popen([sys.executable, "landing.py"])
+    subprocess.Popen([sys.executable, "gui_func.py"])
 
 def run_login():
-    subprocess.Popen([sys.executable, "landing.py", "login"])
+    subprocess.Popen([sys.executable, "gui_func.py", "login"])
 
 window = tk.Tk()
 window.title("Monopoly")
