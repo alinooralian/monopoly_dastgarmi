@@ -1,10 +1,12 @@
 import tkinter as tk
-from landing import signin, login
+import subprocess
+import sys
 
-def signin_action():
-    signin()
-def login_action():
-    login(1)
+def run_signup():
+    subprocess.Popen([sys.executable, "landing.py"])
+
+def run_login():
+    subprocess.Popen([sys.executable, "landing.py", "login"])
 
 window = tk.Tk()
 window.title("Monopoly")
@@ -28,9 +30,9 @@ button_style = {
     "relief": "raised",
     "bd": 3
 }
+tk.Button(window, text="Signup", command=run_signup, **button_style).pack(pady=5)
+tk.Button(window, text="Login", command=run_login, **button_style).pack(pady=5)
 
-tk.Button(window, text="Signup", command=signin_action, **button_style).pack(pady=5)
-tk.Button(window, text="Login", command=login_action, **button_style).pack(pady=5)
 tk.Button(window, text="Exit", command=window.destroy, **button_style).pack(pady=5)
 
 window.mainloop()
