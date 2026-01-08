@@ -1,10 +1,7 @@
 import random
+import json
 
-players = { "player1" : { "position": 0 , "cash": 1500 , "jail": False , "get_out_of_jail_card": False , "dice_counter": 3 , "property": {} } , 
-            "player2" : { "position": 0 , "cash": 1500 , "jail": False , "get_out_of_jail_card": False , "dice_counter": 3 , "property": {} } ,
-            "player3" : { "position": 0 , "cash": 1500 , "jail": False , "get_out_of_jail_card": False , "dice_counter": 3 , "property": {} } ,
-            "player4" : { "position": 0 , "cash": 1500 , "jail": False , "get_out_of_jail_card": False , "dice_counter": 3 , "property": {} } ,
-            "bank"    : { "cash": float('inf')} }
+players["bank"] = {"cash" : float('inf')}
 
 
 tiles = { 0  : { "type": ""                , "owner": "bank" } ,
@@ -483,3 +480,6 @@ while len(player_list) > 1:
         double_dice_counter = 0
     else:
         double_dice_counter += 1
+
+print(f"Wow! {player_list[0]} won this game.")
+exit()

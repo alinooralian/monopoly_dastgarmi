@@ -14,7 +14,11 @@ with open("users.json", "r") as f:
     except json.JSONDecodeError:
         users = {}
 
-players = {}
+with open("players.json", "r") as f:
+    try:
+        players_ = json.load(f)
+    except json.JSONDecodeError:
+        players_ = {}
 
 pygame.mixer.init()
 NAV_SOUND = pygame.mixer.Sound('menu_navigate_01.wav')
@@ -84,12 +88,19 @@ def signup(path):
     userid = str(uuid.uuid4())
     hpassword = hash_password(password)
     users[userid] = [username, hpassword, email]
+    players_[username] = {
+        "position": 0,
+        "cash": 1500,
+        "jail": False,
+        "get_out_of_jail_card": False,
+        "dice_counter": 3,
+        "property": {}
+    }
     players[userid] = {
         "username": username,
         "password": hpassword,
         "position": 0,
         "cash": 1500,
-        "broke": False,
         "jail": False,
         "get_out_of_jail_card": False,
         "dice_counter": 3,
@@ -99,6 +110,8 @@ def signup(path):
         json.dump(users, f, ensure_ascii=False, indent=4)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(players, f, ensure_ascii=False, indent=4)
+    with open("players.json", "w", encoding="utf-8") as f:
+        json.dump(players_, f, ensure_ascii=False, indent=4)
     
     print(f"Hello {username}! You are ready to play.")
     clean(1)
@@ -117,12 +130,19 @@ def login(path, Type):
             if users[i][0] == username:
                 check = True
                 if check_password(password, users[i][1]):
+                    players_[username] = {
+                        "position": 0,
+                        "cash": 1500,
+                        "jail": False,
+                        "get_out_of_jail_card": False,
+                        "dice_counter": 3,
+                        "property": {}
+                    }
                     players[i] = {
                         "username": username,
                         "password": users[i][1],
                         "position": 0,
                         "cash": 1500,
-                        "broke": False,
                         "jail": False,
                         "get_out_of_jail_card": False,
                         "dice_counter": 3,
@@ -130,6 +150,8 @@ def login(path, Type):
                     }
                     with open(path, "w", encoding="utf-8") as f:
                         json.dump(players, f, ensure_ascii=False, indent=4)
+                    with open("players.json", "w", encoding="utf-8") as f:
+                        json.dump(players_, f, ensure_ascii=False, indent=4)
                     print(f"Hello {username}! You are ready to play.")
                     clean(1)
                     return True
@@ -167,7 +189,10 @@ while True:
             else:
                 with open(path, "w", encoding="utf-8") as f:
                     json.dump({}, f, ensure_ascii=False, indent=4)
+                with open("players.json", "w", encoding="utf-8") as f:
+                    json.dump({}, f, ensure_ascii=False, indent=4)
                 players = {}
+                players_ = {}
                 break
         
         while len(players) < 4:
@@ -183,6 +208,7 @@ while True:
                     pass
         
         if len(players) == 4:
+            import logic
             break
     
     elif choice == "Load Game":
@@ -211,6 +237,7 @@ while True:
             while not login(path, 2):
                 pass
         
+        import logic
         break
     
     elif choice == "Exit":
